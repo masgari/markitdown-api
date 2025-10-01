@@ -19,24 +19,24 @@ RUN uv pip install --no-cache-dir -r requirements.txt
 FROM python:3.13-slim
 
 # Create a non-root user
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN groupadd -r mrkdn && useradd -r -g mrkdn mrkdn
 
 # Set the working directory and ownership preemptively
 WORKDIR /app
-RUN chown appuser:appuser /app
+RUN chown mrkdn:mrkdn /app
 
 # Copy the virtual environment from the builder stage
 COPY --from=builder /app/venv /app/venv
-RUN chown -R appuser:appuser /app/venv
+RUN chown -R mrkdn:mrkdn /app/venv
 
 # Set environment path
 ENV PATH="/app/venv/bin:$PATH"
 
 # Switch to non-root user before copying application code
-USER appuser
+USER mrkdn
 
 # Copy only the application code with correct ownership using --chown
-COPY --chown=appuser:appuser . /app/
+COPY --chown=mrkdn:mrkdn . /app/
 
 # Make port available
 EXPOSE 8490

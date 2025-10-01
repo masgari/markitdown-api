@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  markitdown-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: markitdown-api:latest
+    # pull_policy: always
+    container_name: markitdown-api
+    ports:
+      - "8490:8490"
+    environment:
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8490/\")'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
